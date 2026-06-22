@@ -14,7 +14,7 @@ define Build/creality_wb-01-factory
 	( \
 		echo '#!/bin/sh'; \
 		echo '[ -z "$$2" ] && file="factory.bin" || file="$$2/factory.bin"'; \
-		echo 'file_size=$$(wc -c < $$file)'; \
+		echo 'file_size=$$(wc -c < $$file)'; \tplink_tl-mr6400-v5
 		echo 'rootfs_size=$$((file_size - $(kernel_size)))'; \
 		echo 'mtd_write -o 0 -l $(kernel_size) write $$file Kernel'; \
 		echo 'mtd_write -r -o $(kernel_size) -l $$rootfs_size write $$file RootFS'; \
@@ -1093,6 +1093,22 @@ define Device/tplink_tl-mr6400-v5
 endef
 TARGET_DEVICES += tplink_tl-mr6400-v5
 
+define Device/tplink_tl-mr6400-v5-ubootmod
+  SOC := mt7628an
+  DEVICE_VENDOR := TP-Link
+  DEVICE_MODEL := TL-MR6400
+  DEVICE_VARIANT := v5 (UBoot mod)
+  KERNEL_LOADADDR := 0x80000000
+  KERNEL := kernel-bin | gzip | fit gzip $$(KDIR)/image-$$(firstword $$(DEVICE_DTS)).dtb
+  KERNEL_INITRAMFS := kernel-bin | gzip | fit gzip $$(KDIR)/image-$$(firstword $$(DEVICE_DTS)).dtb
+  IMAGE_SIZE := 7916k
+  IMAGES := sysupgrade.bin
+  IMAGE/sysupgrade.bin := append-kernel | pad-to 64k | \
+      append-rootfs | pad-rootfs | check-size | append-metadata
+  UBOOT_DEVICE_NAME := mt7628_tplink_tl-mr6400-v5
+endef
+TARGET_DEVICES += tplink_tl-mr6400-v5-ubootmod
+
 define Device/tplink_tl-mr6400-v7
   $(Device/tplink-v2)
   IMAGE_SIZE := 15872k
@@ -1467,7 +1483,7 @@ TARGET_DEVICES += xiaomi_miwifi-nano
 define Device/xiaomi_mi-ra75
   IMAGE_SIZE := 14976k
   DEVICE_VENDOR := Xiaomi
-  DEVICE_MODEL := MiWiFi Range Extender AC1200 
+  DEVICE_MODEL := MiWiFi Range Extender AC1200
   DEVICE_VARIANT := RA75
   DEVICE_PACKAGES := kmod-mt76x2
   SUPPORTED_DEVICES += xiaomi,mira75

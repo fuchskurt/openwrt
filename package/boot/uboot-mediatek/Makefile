@@ -214,6 +214,15 @@ define U-Boot/mt7628_ravpower_rp-wd009
   UBOOT_IMAGE:=u-boot.bin
 endef
 
+define U-Boot/mt7628_tplink_tl-mr6400-v5
+  NAME:=TP-Link TL-MR6400 v5
+  BUILD_TARGET:=ramips
+  BUILD_SUBTARGET:=mt76x8
+  BUILD_DEVICES:=tplink_tl-mr6400-v5-ubootmod
+  UBOOT_CONFIG:=mt7628_tplink_tl-mr6400-v5
+  UBOOT_IMAGE:=u-boot-with-spl.bin
+endef
+
 define U-Boot/mt7629_rfb
   NAME:=MT7629 Reference Board
   BUILD_SUBTARGET:=mt7629
@@ -1250,6 +1259,7 @@ UBOOT_TARGETS := \
 	mt7623a_unielec_u7623 \
 	mt7628_rfb \
 	mt7628_ravpower_rp-wd009 \
+	mt7628_tplink_tl-mr6400-v5 \
 	mt7629_rfb \
 	mt7981_abt_asr3000 \
 	mt7981_bazis-ax3000wm \
